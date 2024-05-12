@@ -1,19 +1,30 @@
-let tooltipItems = document.querySelectorAll('.has-tooltip')
+let hasTooltipItems = document.querySelectorAll('.has-tooltip')
 
-tooltipItems.forEach(tooltip => {
-	tooltip.addEventListener('click', function(e) {
+hasTooltipItems.forEach(hasTooltip => {
+	hasTooltip.addEventListener('click', function(e) {
 
 		e.preventDefault();
-		let title = tooltip.getAttribute("title");
-		let tooltipItemsActive = document.getElementsByClassName('tooltip_active');
 
-		i = tooltipItemsActive.length
-		while (i > 0) {
-			tooltipItemsActive[i - 1].remove()
-			i--
+		const title = hasTooltip.getAttribute("title");
+		const top = hasTooltip.getBoundingClientRect().bottom;
+		const left = hasTooltip.getBoundingClientRect().left;
+		let tooltipItem = document.querySelector('.tooltip');
+
+		if (tooltipItem) {
+			if (title === tooltipItem.textContent) {
+				tooltipItem.classList.toggle('tooltip_active')
+			} else {
+				tooltipItem.textContent = title
+				tooltipItem.classList.add('tooltip_active')
+				style = "position: absolute; top: " + top + "px; left: " + left + "px;"
+				tooltipItem.setAttribute("style", style)
+			}
+		} else {
+			hasTooltip.insertAdjacentHTML("afterEnd", '<div class="tooltip tooltip_active">' + title + '</div>');
+			tooltipItem = document.querySelector('.tooltip');
+			style = "position: absolute; top: " + top + "px; left: " + left + "px;"
+			tooltipItem.setAttribute("style", style)
 		}
-		const top = tooltip.getBoundingClientRect().bottom;
-		const left = tooltip.getBoundingClientRect().left;
-		tooltip.insertAdjacentHTML("afterEnd", '<div class="tooltip tooltip_active" style="left:' + left + 'px;top:' + top + 'px;">' + title + '</div>');
+
 	})
 })

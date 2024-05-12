@@ -16,6 +16,9 @@ productList.forEach(product => {
 	btnMinus.addEventListener('click', function(e) {
 		e.preventDefault()
 		countText = Number(countProduct.textContent) - 1
+		if (countText < 1) {
+			countText = 1
+		}
 		countProduct.textContent = countText
 	})
 
@@ -24,27 +27,26 @@ productList.forEach(product => {
 		const productId = product.getAttribute('data-id')
 		const productImg = product.querySelector('.product__image').getAttribute("src")
 		let productCountText = countProduct.textContent
-		if (cartProducts.childElementCount == 0) {
+
+		let cartProductsList = cartProducts.querySelectorAll('.cart__product')
+
+		const findProductCart = (array, productId) => {
+			for (let i = 0; i < array.length; i++) {
+				if (array[i].getAttribute('data-id') === productId) {
+					return array[i]
+				}
+			}
+			return undefined
+		}
+
+		const productInCart = findProductCart(cartProductsList, productId)
+
+		if (!productInCart) {
 			cartProducts.insertAdjacentHTML("BeforeEnd", '<div class="cart__product" data-id="' + productId + '"><img class="cart__product-image" src="' + productImg + '"><div class="cart__product-count">' + productCountText + '</div></div>')
 		} else {
-
-			let cartProductsList = cartProducts.querySelectorAll('.cart__product')
-			let idInCart = 0
-			cartProductsList.forEach((cartItem, index) => {
-				console.log(cartItem.getAttribute('data-id'))
-				if (cartItem.getAttribute('data-id') === productId) {
-					idInCart = index + 1
-				}
-			})
-			if (idInCart > 0) {
-				idInCart = idInCart - 1
-				let text = cartProductsList[idInCart].querySelector('.cart__product-count').textContent
-				let textNew = Number(text) + Number(productCountText)
-				cartProductsList[idInCart].querySelector('.cart__product-count').textContent = textNew
-			} else {
-				cartProducts.insertAdjacentHTML("BeforeEnd", '<div class="cart__product" data-id="' + productId + '"><img class="cart__product-image" src="' + productImg + '"><div class="cart__product-count">' + productCountText + '</div></div>')
-			}
-
+			let text = productInCart.querySelector('.cart__product-count').textContent
+			let textNew = Number(text) + Number(productCountText)
+			productInCart.querySelector('.cart__product-count').textContent = textNew
 		}
 		countProduct.textContent = 1
 	})

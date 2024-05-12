@@ -4,7 +4,7 @@ const tasksList = document.getElementById("tasks__list")
 btnAdd.addEventListener('click', function(e) {
 
 	e.preventDefault();
-	let text = document.getElementById('task__input').value
+	let text = trim(document.getElementById('task__input').value)
 
 	if (text.length > 0) {
 		document.getElementById('task__input').value = ''
