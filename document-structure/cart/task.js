@@ -28,18 +28,15 @@ productList.forEach(product => {
 		const productImg = product.querySelector('.product__image').getAttribute("src")
 		let productCountText = countProduct.textContent
 
-		let cartProductsList = cartProducts.querySelectorAll('.cart__product')
+		let cartProductsList = Array.from(cartProducts.querySelectorAll('.cart__product'))
 
-		const findProductCart = (array, productId) => {
-			for (let i = 0; i < array.length; i++) {
-				if (array[i].getAttribute('data-id') === productId) {
-					return array[i]
-				}
+		function findProductCart(element, index, array) {
+			if (element.getAttribute('data-id') === productId) {
+				return element
 			}
 			return undefined
 		}
-
-		const productInCart = findProductCart(cartProductsList, productId)
+		const productInCart = cartProductsList.find(findProductCart)
 
 		if (!productInCart) {
 			cartProducts.insertAdjacentHTML("BeforeEnd", '<div class="cart__product" data-id="' + productId + '"><img class="cart__product-image" src="' + productImg + '"><div class="cart__product-count">' + productCountText + '</div></div>')
